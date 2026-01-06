@@ -1,0 +1,142 @@
+# DOM Notes (with innerHTML, firstElementChild, firstChild)
+
+## What is the DOM?
+
+The **Document Object Model (DOM)** is a live, in-memory tree of objects created by the browser from your HTML. JavaScript talks to this tree—not to raw HTML files—so pages can change without reloading.
+
+Everything lives under a single global object:
+
+```js
+document
+```
+
+---
+
+## Selecting elements
+
+You can navigate the tree directly or use selectors.
+
+```js
+document.querySelector("h1")
+document.querySelectorAll("li")
+```
+
+Selectors use **CSS selector syntax**.
+
+---
+
+## `innerHTML`
+
+### What it is
+
+`innerHTML` is a **property** that represents the HTML *inside* an element.
+
+### Get
+
+```js
+document.querySelector("h1").innerHTML
+```
+
+### Set
+
+```js
+document.querySelector("h1").innerHTML = "Good Bye";
+```
+
+This replaces **everything between the opening and closing tags**.
+
+⚠️ Setting `innerHTML` can remove existing child elements and event listeners.
+
+---
+
+## `firstElementChild`
+
+### What it is
+
+`firstElementChild` returns the **first child that is an HTML element** (ignores text nodes like spaces and line breaks).
+
+### Example
+
+```js
+document.firstElementChild              // <html>
+document.firstElementChild.firstElementChild  // <head>
+document.firstElementChild.lastElementChild   // <body>
+```
+
+This is the safest way to navigate when whitespace exists in HTML.
+
+---
+
+## `firstChild`
+
+### What it is
+
+`firstChild` returns the **very first child node**, which can be:
+
+* a text node (whitespace)
+* a comment
+* an element
+
+### Example
+
+```js
+document.body.firstChild
+```
+
+Often this returns a **text node**, not an element.
+
+---
+
+## `firstChild` vs `firstElementChild`
+
+| Feature                | `firstChild` | `firstElementChild` |
+| ---------------------- | ------------ | ------------------- |
+| Returns text nodes     | Yes          | No                  |
+| Returns only elements  | No           | Yes                 |
+| Safe for DOM traversal | ❌            | ✅                   |
+
+Rule of thumb:
+
+> **Use `firstElementChild` unless you explicitly need text nodes.**
+
+---
+
+## Properties vs Methods
+
+* **Properties** describe state (no parentheses)
+
+```js
+element.innerHTML
+element.style.color
+```
+
+* **Methods** perform actions (always parentheses)
+
+```js
+element.click()
+element.appendChild()
+```
+
+---
+
+## Mini example (all together)
+
+```js
+var body = document.firstElementChild.lastElementChild;
+var heading = body.firstElementChild;
+
+heading.innerHTML = "Hello DOM";
+heading.style.color = "red";
+```
+
+This selects the `<h1>` and changes it—live, no reload.
+
+---
+
+## Core intuition 🧠
+
+* HTML → blueprint
+* DOM → live object tree
+* JavaScript → remote control
+
+You don’t rewrite the blueprint. You manipulate the live structure.
